@@ -51,7 +51,7 @@ class Stones:
     
     def get_stone_yellow(self):
         if self.__yellow_value > 0:
-            return self.__yellow_value
+            return self.__yellow_value % 4
         else:
             return 0
         
