@@ -1,6 +1,8 @@
 #custom
 _old_
 _src
+_test.py
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
