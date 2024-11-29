@@ -20,8 +20,8 @@ cipher.config_comparative_alphabet(disk_index=disk_index,comparative_alphabet=re
 normal_text = 'Good Morning/Evening github user'
 encrypted_example = 'CMMZ UMCIDIB/SYSIDIB BDQPAL AJSC'
 
-print(f"Normal alphabet:\n###{cipher.get_comparative_alphabet()}###")
-print(f"Disk alphabet:\n###{cipher.get_disk_alphabet()}###")
+print(f"Normal alphabet:\n### {cipher.get_comparative_alphabet()} ###")
+print(f"Disk alphabet:\n### {cipher.get_disk_alphabet()} ###")
 
 print()
 
