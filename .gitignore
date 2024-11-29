@@ -2,6 +2,8 @@
 _old_
 _src
 _test.py
+.pypirc
+Messages
 
 
 # Byte-compiled / optimized / DLL files
