@@ -72,3 +72,20 @@ class Stones:
             return self.__purple_value
         else:
             return 0
+        
+        
+        
+    #### special ####
+    
+    def __str__(self) -> str:
+        _temp = '################ Configuración de Piedras Mágicas ################\n'
+        
+        _temp += f'Piedra    |  Valor Total\n'
+        _temp += f'YELLOW    |  {self.get_stone_yellow()}\n'
+        _temp += f'RED-GREEN |  {self.get_stone_red_green()}\n'
+        _temp += f'BLUE      |  {self.get_stone_blue()}\n'
+        _temp += f'PURPLE    |  {self.get_stone_purple()}\n'
+        
+        return _temp
+        
+        
