@@ -15,7 +15,7 @@ disk_serie = "71298SCDFKQJAC"
 
 #creacion del disco con su configuracion deseada
 disk = cd.Disk(alphabet=regular_alphabet,split_list=splits,disk_serie=disk_serie).Create_Disk()
-print(disk)
+#print(disk)
 
 #creacion de las piedras con su valor
 stones = cd.Stones([("YELLOW",1),('RED-GREEN',2),("BLUE",1)])
@@ -36,7 +36,7 @@ cipher.config_comparative_alphabet(disk_index=disk_index,comparative_alphabet=re
 
 
 # Texto a encriptar
-normal_text = 'Good Morning/Evening github user'
+normal_text = 'Good Morning/Evening GitHub user'
 
 # Texto a desencriptar
 encrypted_example = 'CMMZ UMCIDIB/SYSIDIB BDQPAL AJSC'
@@ -51,6 +51,11 @@ print()
 cipher.Encrypt(normal_text)
 print(f"Normal text now encrypted:| {cipher.get_encrypted_text()} |")
 
+#save files
+cipher.save_encrypted(path='./Messages',context='Contexto_Del_Archivo')
+
+
 #desencriptacion del texto, solo funciona si es la misma configuracion con la que fue encryptado
 cipher.Encrypt(encrypted_example,True)
-print(f"Encrypted text now de-encrypted:| {cipher.get_encrypted_text()} |")
+print(f"Encrypted text now decrypted:| {cipher.get_encrypted_text()} |")
+cipher.save_encrypted(path='./Messages',context='Mensaje_Desencriptado_GitHub')
