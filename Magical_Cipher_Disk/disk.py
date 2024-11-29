@@ -153,11 +153,17 @@ class Disk:
     def get_id(self):
         return list(self.__disk["disk"].keys())
     
+    
+    
+    ### Special ###
+    
     def __str__(self) -> str:
         _d = self.get_disk()
 
-        _temp = f"Serie de Disco: '{_d["serie"]}'\n"
-        _temp += f"Alfabeto usado: '{_d["alphabet"]}'\n"
+        _temp = '################ Configuración de Disco ################\n'
+        _temp += f"Serie de Disco: '{_d["serie"]}'\n"
+        _temp += f"Alfabeto usado:  '{self.__alphabet}'\n"
+        _temp += f"Alfabeto creado: '{_d["alphabet"]}'\n"
         _temp += f"Splits alfabeto: '{self.__split_list}'\n"
         
         for i in self.get_id():
