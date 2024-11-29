@@ -1,4 +1,4 @@
-import Magical_Cipher_Disk as cd
+import Magical_Cipher_Disk as mcd
 
 regular_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -14,14 +14,14 @@ splits = [6,7]
 disk_serie = "71298SCDFKQJAC"
 
 #creacion del disco con su configuracion deseada
-disk = cd.Disk(alphabet=regular_alphabet,split_list=splits,disk_serie=disk_serie).Create_Disk()
+disk = mcd.Disk(alphabet=regular_alphabet,split_list=splits,disk_serie=disk_serie).Create_Disk()
 #print(disk)
 
 #creacion de las piedras con su valor
-stones = cd.Stones([("YELLOW",1),('RED-GREEN',2),("BLUE",1)])
+stones = mcd.Stones([("YELLOW",1),('RED-GREEN',2),("BLUE",1)])
 
 #Asignacion del objeto cipher con el disco y las piedras correspondientes
-cipher = cd.Cipher(disk=disk,stones=stones) 
+cipher = mcd.Cipher(disk=disk,stones=stones) 
 
 # Orden del disco, el como las partes se juntaran para rearmar la figura circular
 disk_order = ['UJ','QW','TH','BF']
