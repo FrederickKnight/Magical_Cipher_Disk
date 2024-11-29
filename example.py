@@ -1,4 +1,4 @@
-import Cipher_Disks as cd
+import Magical_Cipher_Disk as cd
 
 regular_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 splits = [6,7]
