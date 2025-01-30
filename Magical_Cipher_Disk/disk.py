@@ -10,6 +10,7 @@ class Disk:
         
         if self.__disk_serie != None:
             __disk_serie_split = self.__disk_serie.split("SCDFK")
+            
             if self.__random_state != None:
                 print("-------------------------------------------------------------------")
                 print(f"Se esta usando la serie '{disk_serie}' para la creacion del Disk")
@@ -24,7 +25,6 @@ class Disk:
             
             
         self.__created_alphabet = self.__create_alphabet__(self.__alphabet,self.__random_state)
-        
         self.__comp_disk_serie = f"{self.__created_alphabet[0]}{self.__created_alphabet[-1]}{self.__created_alphabet[1]}{self.__created_alphabet[-2]}"
         
         if __disk_serie_split != None:
@@ -77,13 +77,13 @@ class Disk:
             _ca_alphabet = list(alphabet)
         else:
             _ca_alphabet = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')  
-            
-        _ca_random_state = random_state
-        
-        if _ca_random_state != None:
-            random.seed(_ca_random_state)
+                    
+        if random_state != None:
+            random.seed(random_state)
         else:
             self.__random_state=random.randint(0,9999999)
+            random.seed(self.__random_state)
+            
         
         #creation of the new alphabet, randomly selected
         _ca_created_alphabet = ''
