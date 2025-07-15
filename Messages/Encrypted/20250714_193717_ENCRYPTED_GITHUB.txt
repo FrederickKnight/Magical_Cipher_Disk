@@ -1,0 +1,72 @@
+###### ENCRYPTED ######
+Date: 20250714_193717
+
+###### TEXT ######
+Good Morning/Evening GitHub user
+
+###### RESULT ENCRYPTED ######
+HTHO DHIY[YH/GZGY[YH HU?PE? D!¿I
+
+###### ALPHABETS ######
+Source Alphabet: QRSTUVWXYZABCDEFGHIJKLMNOP
+Target Alphabet: XI!?ES¿QFPUCROGYH}[JK*DZT#
+
+###### Disk ######
+Seed: 2025
+Splits: [6, 7]'
+Ids: ['XS', 'J#', 'O[', '¿R']
+Parts. ['XI!?ES', 'JK*DZT#', 'OGYH}[', '¿QFPUCR']
+Order: ['XS', '¿R', 'O[', 'J#']
+Index: ('Q', 'X')
+
+###### Stones ######
+[STONE] -- [VALUE]
+YELLOW -- 2
+RED-GREEN -- 5
+BLUE -- 2
+
+###### Cipher ######
+Seed: 2025
+
+###### TRACES ######
+G -> H -- Change [SIMPLE]
+O -> T -- Change [SIMPLE]
+O -> ? -- Change [RED-GREEN]
+ ^ ? -> H -- Change [BLUE]
+D -> O -- Change [SIMPLE]
+M -> D -- Change [SIMPLE]
+O -> ? -- Change [RED-GREEN]
+ ^ ? -> H -- Change [BLUE]
+R -> I -- Change [SIMPLE]
+N -> ! -- Change [RED-GREEN]
+ ^ ! -> Y -- Change [BLUE]
+I -> [ -- Change [SIMPLE]
+N -> ! -- Change [RED-GREEN]
+ ^ ! -> Y -- Change [BLUE]
+G -> H -- Change [SIMPLE]
+/ -- PASS
+E -> G -- Change [SIMPLE]
+V -> U -- Change [RED-GREEN]
+ ^ U -> Z -- Change [BLUE]
+E -> G -- Change [SIMPLE]
+N -> ! -- Change [RED-GREEN]
+ ^ ! -> Y -- Change [BLUE]
+I -> [ -- Change [SIMPLE]
+N -> ! -- Change [RED-GREEN]
+ ^ ! -> Y -- Change [BLUE]
+G -> H -- Change [SIMPLE]
+G -> H -- Change [SIMPLE]
+I -> Z -- Change [RED-GREEN]
+ ^ Z -> U -- Change [BLUE]
+T -> ? -- Change [SIMPLE]
+H -> D -- Change [RED-GREEN]
+ ^ D -> P -- Change [BLUE]
+U -> E -- Change [SIMPLE]
+B -> H -- Change [RED-GREEN]
+ ^ H -> ? -- Change [BLUE]
+U -> P -- Change [RED-GREEN]
+ ^ P -> D -- Change [BLUE]
+S -> ! -- Change [SIMPLE]
+E -> J -- Change [RED-GREEN]
+ ^ J -> ¿ -- Change [BLUE]
+R -> I -- Change [SIMPLE]

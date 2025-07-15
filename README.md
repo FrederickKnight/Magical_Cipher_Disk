@@ -1,139 +1,194 @@
-# Magic-Cipher-Disk
+# Magical Cipher Disk
 
-Es un pequeño proyecto hecho para facilitarme la vida al jugar D&D con mis amigos, siendo el DM he preparado cosas para la diversión de ambas partes y como a algunos de ellos les gusta descifrar mensajes fue que programe esto y así encriptar mensajes incluso a media partida.
+## Tabla de Contenido
+
+- [Inspiración](#inspiración)
+- [Mécanicas](#mécanicas)
+    - [Stones](#stones)
+- [Stone Holder](#stone-holder)
+- [Disk](#disk)
+- [Cipher](#cipher)
+- [Ejemplo Completo](#ejemplo-completo)
+- [CipherIO](#cipherio)
+- [Changelog](#chagelog)
 
 ## Inspiración
 
-Este cifrado esta basado en el Cifrado de César, es casi exactamente igual en la base.
+Este proyecto surgio por la necesidad de tener que encriptar mensajes para mis jugadores de D&D, queria hacer cifrados pero con añadidos de fantasia, si bien podria haberlos hecho a mano, teniendo este proyecto todo eso me resutlaria mas facil.
 
-Sin embargo para añadirle el toque de fantasía, añadí una mecánica con unas "Piedras" de colores, estas las explicare mas adelante pero su función es cambiar partes del cifrado, como añadir que la posición sea unas cuantas mas o unas cuantas menos, o que la posición sea la opuesta en el Disco.
+Esta basado en el Cifrado de César, simples discos que rotan y usan un Index para determinar el cifrado.
 
-Pienso añadir mas mecánicas a este "minijuego", como podría ser mas piedras con efectos diferentes o incluso mas partes.
+Las mecanicas añadidas son en base a fantasia, con piedras magicas que actuan como transformadores extra o aplican reglas especiales.
 
-# Partes
+## Mécanicas
 
-## Discos
+Este cifrado tiene * mecanicas.
 
-El cifrado consta de dos Discos, cada uno con un alfabeto que puede ser proporcionado y personalizado, no solo con letras o números sino otros tipos de caracteres especiales.
+### Stones
 
-El alfabeto de ambos discos puede ser proporcionado a su función correspondiente, y puede ser el mismo o diferente. Ambos discos pueden configurarse, sin embargo solo el interior, el cual servirá como el alfabeto encriptado, es el que se configurara con la siguiente función.
+Las mas importantes, definen mayormente las reglas y comportamiento del cifrado, desde si debe hacerse o debe saltarse, debe cambiarse la letra ciertas posiciones, o incluso cambiarse por la letra al lado contrario del disco.
 
-```python
-disco_interior = Magical_Cipher_Disk.Disk('ABCDEFGHIJKLMNOPQRSTUVWXYZ').Create_Disk()
-```
+Por ahora hay 3 tipos de colores, y este color es el que dicta esas reglas.
 
-Por otro lado el alfabeto que servirá como el "normal" o aquel que no esta encriptado se proporcionara mas adelante en una función cuando creemos y configuremos el "Cipher".
+- YELLOW: Bateria del cifrado, si esta no esta presente entonces ninguna otra piedra se activara.
 
-## Piedras
+- RED-GREEN: Es como una moneda de 2 caras, cambiara la letra por una posicion en sentido del reloj o a la inversa.
 
-Hay varios tipos de piedras, cada una con su función y color respectivo. Además de que cada una sirve en una jerarquía y orden, siendo la amarilla la mas importante.
+- BLUE: Cambiara la letra por la opuesta en el disco.
 
-Por ahora se tienen:
-- **Amarilla**  :: Sirve como la piedra de energía, si no hay una presente ninguna otra piedra tendrá alguna función. Además el valor que se le de a esta piedra servirá como el "tempo" de cada cuanto se activaran las otras piedras. Si su valor es 3, entonces cada 3 letras se activaran y harán su función las demás. 
-- **Roja-Verde** :: Esta es como una moneda de dos caras, una roja y otra verde, su función es simple pues dependiendo del valor que se le de, esta añadirá o restara posiciones al cifrado de la letra.
-- **Azul** :: Cuando esta actúe la letra pasara a ser la del lado opuesto del disco, significando que se añadirá 13 posiciones adelante de donde debería estar. Como si añadieras una piedra verde con valor 13. Sin embargo esta tiene un "tempo" propio que dependerá de su valor, pues actuara cada ciertas letras como su valor tenga, igual que la **Piedra Amarilla**, pero solo sumara el "tempo" con cada letra que se le pase. Significa que no seguirá contando si la piedra amarilla no dejo pasar alguna letra.
+Cada piedra puede tener un valor, que servira para una u otra cosa en esa piedra.
 
-Las piedras se configuran de esta manera en el programa.
+- YELLOW: Cada cuanto se activaran las demas piedras, si su valor es 3 entonces cada 3 letras aplicaran las demas piedras. Su valor maximo sera 4 y si sobrepasa este numero sera como comenzar el conteo denuevo. Por ejemplo 7 sera 3 y 9 sera 1. Este servira como un Tempo.
 
-```python
-piedras = Magical_Cipher_Disk.Stones([("YELLOW",1),('RED-GREEN',2),("BLUE",1)])
-```
+- RED-GREEN: Cuantas posiciones se añadiran a la letra para cambiar su valor. Puede ser negavito o positivo.
 
-Dando una lista que contiene las tuplas de una piedra con su nombre y valor, 
+- Blue: Sera un Tempo propio, cada vez que se cumpla ese tempo la letra se cambiara por su opuesto en el disco.
 
-## Estructura Central
-
-**IMPORTANTE** :: Esta pieza es Teórica en el programa, solo "existe" en la versión dibujada a mis jugadores, pero sigue existiendo su mecánica en el programa, pues es donde las piedras se colocan y "configuran" como se muestra en la parte de arriba.
-
-Esta pieza es un circulo completo y relleno, en el centro de todo el mecanismo, y consta de un hueco en el centro y aparte una separación de 4 partes en su parte solida.
-
-### Uso
-
-- **Valor de las piedras** :: En esta estructura en las 4 partes hay pequeños huecos para colocar las **Piedras**, y cada una de las 4 partes tiene un valor, siendo 1 :: 2 :: 3 :: 4 exactamente, en orden de reloj. Cuando una **Piedra** se coloca en alguna de estos huecos, dependiendo en que parte este esta tendrá ese valor, siendo por lo cual 4 el máximo para una sola piedra. Sin embargo si tienes mas de una misma piedra puedes colocarlas y darle mas valor.
-- **Hueco Central** :: Este es donde la piedra amarilla iría, y el valor se le da dependiendo de hacia donde este viendo la piedra con su parte "norte" funcionando como una brújula. Esta su valor máximo en todas las ocasiones es 4 y el mínimo es 1. Si se intenta dar un valor mas alla de 4 funcionara como un reloj y pasara al siguiente, si se da un 5 será 1.
-
-# Funcionamiento Completo
-
-## Importación
+De esta manera, cada 2 letras se aplicaran las piedras.
 
 ```python
-import Magical_Cipher_Disk as mcd
-
+stone_yellow = YellowStone(2)
+stone_redgreen = RedGreenStone(3)
+stone_blue = BlueStone(4)
 ```
 
-## Creación del disco Interior
+## Stone Holder
+
+Encargado de aplicar las piedras y de llevar un control sobre cada paso realizado.
+
+Aqui se guardaran todas las piedras que quieras aplicar a cierto cifrado.
 
 ```python
-regular_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-disk = mcd.Disk(alphabet=regular_alphabet).Create_Disk()
+stone_holder_1 = StoneHolder([
+    stone_yellow,
+    stone_redgreen,
+    stone_blue
+])
 ```
 
-- Esto puede modificarse de igual manera para añadir separaciones de letras especificas, como por ejemplo:
+## Disk
+
+Representa uno de los discos del cifrado, especificamente el disco con los caracteres que seran el resultado de la encriptacion.
+
+Un añadido propio a esta mecanica basada en la de César, es que cada disco es como un rompecabezas, que puede estar separado en partes y ordenarse de la manera que se guste despues. como si pasaras de la A-Z en un solo disco a tener A-G, P-Z, H-O. y asi tener un disco de 3 partes y ordenado de manera diferente.
+
+Cada disco que quieras crear tendra que constar con 3 ajustes, el alfabeto, los splits y la seed.
+
+- Alfabeto: El alfabeto que sera el que sustituira las letras del texto original, ya sea de A-Z o con caracteres especiales como  "#?![}.," y demas.
+
+- Splits: Es una lista de int, cada int dentro de esta lista sera la cantidad de caracteres que determinaran el tamaño de esa parte del disco, si el alfabeto es mas grande y sobras letras entonces se creara un loop usando esa misma lista repetidamente, hasta que no queden mas.
+
+seed: Una semilla para que la parte randomizada pueda replicarse si se necesita.
 
 ```python
-splits = [6,7]
-
-disk = mcd.Disk(alphabet=regular_alphabet,split_list=splits).Create_Disk()
+disk_1 = Disk(
+    alphabet = "¿#CDEFGHIJK[}*OPQRSTU?!XYZ",
+    splits = [6,7],
+    seed = 2025
+)
 ```
 
-- También puede configurarse la serie del disco, la cual sirve para que la creación del disco sea exactamente igual en todo momento, como una semilla.
+## Cipher
+
+La base de todo, no hay mucho que decir de esta parte mas alla de que es donde configuraras el cifrado para su encriptacion o desencriptacion.
+
+Aqui le daras todo lo creado anteriormente para que el cipher este completo.
 
 ```python
-disk_serie = "71298SCDFKQJAC"
-disk = mcd.Disk(alphabet=regular_alphabet,split_list=splits,disk_serie=disk_serie).Create_Disk()
+cipher = Cipher(
+    disk = disk_1,
+    stone_holder = stone_holder_1,
+    seed = 2025,
+)
 ```
 
-
-## Creación de piedras
+Ademas para configurar el alfabeto que se usara en el mensaje original, y el orden del Disk asi como su Index. Esto es necesario para el cifrado aunque por default tiene valores aleatorios, exceptuando el alfabeto que por default sera el normal de A-Z.
 
 ```python
-stones = mcd.Stones([("YELLOW",1),('RED-GREEN',2),("BLUE",1)])
+cipher.config_cipher(
+    source_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    disk_order = ['XS', '¿R', 'O[', 'J#'],
+    disk_index = ('Q', 'X')
+)
 ```
 
-## Creación del Cifrador
+De esta manera el cipher ya habria quedado configurado para su uso, solo quedaria darle un mensaje para encriptarlo o desencriptarlo.
 
-- Se crea el cifrador con el disco interior y las piedras proporcionadas
+Ademas de decidir si ese mensaje se guarda o no, usando un True o False.
+
+Lo cual podria quedar asi.
 
 ```python
-cipher = mcd.Cipher(disk=disk,stones=stones)
+mensaje = "Good Morning/Evening GitHub user"
+
+mensaje_encriptado = cipher.Encrypt(mensaje,True)
+
+mensaje_desencriptado = cipher.Decrypt(mensaje_encriptado,False)
 ```
 
-- En el cifrador creado configuramos ahora el disco exterior y el índice con el que se compararan ambos discos
+Esto procederia a guardarse en un log, para poder ver toda la configuracion del cifrado, tanto las piedras como el disco.
+
+## Ejemplo Completo 
+```python
+stone_yellow = YellowStone(2)
+stone_redgreen = RedGreenStone(3)
+stone_blue = BlueStone(4)
+
+stone_holder_1 = StoneHolder([
+    stone_yellow,
+    stone_redgreen,
+    stone_blue
+])
+
+disk_1 = Disk(
+    alphabet = "¿#CDEFGHIJK[}*OPQRSTU?!XYZ",
+    splits = [6,7],
+    seed = 2025
+)
+
+cipher = Cipher(
+    disk = disk_1,
+    stone_holder = stone_holder_1,
+    seed = 2025,
+)
+
+cipher.config_cipher(
+    source_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    disk_order = ['XS', '¿R', 'O[', 'J#'],
+    disk_index = ('Q', 'X')
+)
+
+mensaje = "Good Morning/Evening GitHub user"
+
+mensaje_encriptado = cipher.Encrypt(mensaje)
+
+mensaje_desencriptado = cipher.Decrypt(mensaje_encriptado)
+```
+
+## CipherIO
+
+Al final el mensaje sera guardado en un Log, por default en una carpeta que creara llamada "Messages/Encrypted" o "Messages/Decrypted"
+
+Aqui se guardaran las configuraciones usadas tanto de las Piedras como del Cifrado y sus alfabetos y demas.
+
+usando el CipherIO puedes configurar esta ruta, aunque solo hace esto por ahora, a futuro añadire mas funciones a esta parte.
+
+Ademas tendra que ser añadido a la configuracion del cipher para que este comience a usarlo.
 
 ```python
-cipher.config_comparative_alphabet(disk_index=['J','A'],comparative_alphabet=regular_alphabet)
+logger_1 = CipherIO(
+    base_path = "./Messages"
+)
+
+cipher = Cipher(
+    disk = disk_1,
+    stone_holder = stone_holder_1,
+    seed = 2025,
+    logger = logger_1
+)
 ```
 
-- También podemos configurar el orden con el que las partes del disco interior se ordenaran, esto provoca mayor complejidad al cifrar o descifrar mensajes
-- Este **disk_order** viene de los indices de cada parte en el disco, los cuales puedes obtener con **get_id() en tu objeto disk**
-- Una ves conociendo eso, puedes ordenarlos como gustes
 
-```python
-disk_order = ['UJ','QW','TH','BF']
-cipher.config_comparative_alphabet(disk_index=['J','A'],comparative_alphabet=regular_alphabet,disk_order=disk_order)
-```
+## Changelog
 
-- Por ultimo, encriptar o desencriptar el mensaje
-- El valor True, es para determinar si el texto deberá ser desencriptado, pero solo podrá ser desencriptado si se conoce la configuración inicial
-
-```python
-cipher.Encrypt('normal_text')
-cipher.Encrypt('encrypted_text',True)
-```
-
-## Guardar Configuracion
-
-- Al final, cuando hayas encriptado un mensaje, podrás guardarlo junto con toda su configuración para futuro uso.
-- Puedes proporcionar una dirección especifica, así como el contexto del archivo, este contexto sirve como parte del nombre del archivo.
-- El cual será guardado de esta manera :: 'Serie-del-disco_Contexto-Del-Archivo_Numero-de-archivo.txt' aunque esto podrá cambiar a futuro
-
-```python
-cipher.save_encrypted(path='./Messages',context='Contexto_Del_Archivo')
-```
-
-# To-do
-
-- [ ] Versión Ingles del README.md
-- [ ] Imágenes para mayor comprensión
-- [ ] Programa/app del disco interactivo
+Puedes consultar los cambios y versiones en el archivo [CHANGELOG.md](./CHANGELOG.md).
