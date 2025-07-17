@@ -4,9 +4,7 @@
 
 ### Added
 
-- Ability to reconstruct `Disk` and other components from JSON-like sources.
-- Support for more `Stone` colors.
-- New encryption methods.
+- *(To be Added)*
 
 ### Changed
 
