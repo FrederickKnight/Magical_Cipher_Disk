@@ -33,6 +33,8 @@ class StoneHolder:
         Aplica transformaciones basadas en las 'Stones' que fueron guardadas previamente usando el 'StoneHolder', estas transformaciones
         cambian la letra a otra.
 
+        Si la letra no sufrio ningun cambio con las piedras anteriores, se hara un cambio simple.
+
         Ademas se guarda el 'step' / 'paso' por cada transformación.
 
         Args:
@@ -56,37 +58,70 @@ class StoneHolder:
             raise ValueError(f"Error with the alphabet {target_alphabet}")
 
         YELLOW_STONE:BaseStone = self._stones.get("YELLOW")
-        REDGREEN_STONE:BaseStone = self._stones.get("RED-GREEN")
-        BLUE_STONE:BaseStone = self._stones.get("BLUE")
 
-        if YELLOW_STONE and position > 0:
-            if YELLOW_STONE.value > 0 and position % YELLOW_STONE.value == 0:
+        if YELLOW_STONE and YELLOW_STONE.value > 0 and position >= 0:
+            if position % YELLOW_STONE.value == 0:
+                _letter = self._call_stone_redgreen(
+                    letter=letter,
+                    source_alphabet=source_alphabet,
+                    target_alphabet=target_alphabet,
+                    isEncrypted=isEncrypted
+                )
                 
-                _letter = letter
-
-                if REDGREEN_STONE:
-                    _letter = REDGREEN_STONE.apply(_letter, source_alphabet, target_alphabet, isEncrypted)
-
-                    # saving trace trace
-                    self.add_step(f"{letter} -> {_letter} -- Change [RED-GREEN]")
+                _letter = self._call_stone_blue(
+                    letter=_letter,
+                    position=position,
+                    source_alphabet=source_alphabet,
+                    target_alphabet=target_alphabet,
+                    isEncrypted=isEncrypted
+                )
                 
-                if BLUE_STONE:
-                    if BLUE_STONE.value > 0 and position % BLUE_STONE.value == 0:
-                        _temp_blue_letter = _letter
-                        _letter = BLUE_STONE.apply(_letter, source_alphabet, target_alphabet, isEncrypted)
+                if letter == _letter:
+                    _letter = self._call_simple_change(
+                        letter=letter,
+                        source_alphabet=source_alphabet,
+                        target_alphabet=target_alphabet
+                    )
 
-                        # saving trace trace
-                        self.add_step(f" ^ {_temp_blue_letter} -> {_letter} -- Change [BLUE]")
-                
                 return _letter
             
-        result = self._change_letter(letter,source_alphabet,target_alphabet)
-
-        # saving trace trace
-        self.add_step(f"{letter} -> {result} -- Change [SIMPLE]")
-
-        return result
+        return self._call_simple_change(
+            letter=letter,
+            source_alphabet=source_alphabet,
+            target_alphabet=target_alphabet
+        )
     
+    ## CALL LETTER CHANGES STONES/SIMPLE ##
+    def _call_simple_change(self,letter:str,source_alphabet:str,target_alphabet:str) -> str:
+        _letter = self._change_letter(letter,source_alphabet,target_alphabet)
+
+        self.add_step(f"{letter} -> {_letter} -- Change [SIMPLE]")
+
+        return _letter
+
+    def _call_stone_redgreen(self,letter:str,source_alphabet:str,target_alphabet:str,isEncrypted:bool) -> str:
+        REDGREEN_STONE:BaseStone = self._stones.get("RED-GREEN")
+
+        if REDGREEN_STONE:
+            _letter = REDGREEN_STONE.apply(letter, source_alphabet, target_alphabet, isEncrypted)
+
+            self.add_step(f"{letter} -> {_letter} -- Change [RED-GREEN]")
+            return _letter
+        
+        return letter
+
+    def _call_stone_blue(self,letter:str,position:int,source_alphabet:str,target_alphabet:str,isEncrypted:bool) -> str:
+        BLUE_STONE:BaseStone = self._stones.get("BLUE")
+
+        if BLUE_STONE:
+            if BLUE_STONE.value > 0 and position % BLUE_STONE.value == 0:
+                _letter = BLUE_STONE.apply(letter, source_alphabet, target_alphabet, isEncrypted)
+
+                self.add_step(f" ^ {letter} -> {_letter} -- Change [BLUE]")
+                return _letter
+        
+        return letter
+        
     ## GETTERS ##
     def get_steps_by_stone(self, stone_name: str) -> list[str]:
         """
