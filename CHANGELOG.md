@@ -8,7 +8,10 @@
 
 ### Changed
 
-- *(To be Added)*
+- Stones are now called by functions in the StoneHolder, to enhance readability and repeatability.
+- **Breaking**:Applying Stones:
+  - Stones now apply even if it's the first letter.
+  - A simple change occurs if the letter wasn't changed with the stones.
 
 ### Removed
 
