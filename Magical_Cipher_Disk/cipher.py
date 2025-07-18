@@ -143,14 +143,14 @@ class Cipher:
         if not entry_text or entry_text == "":
             raise ValueError("There is no text")
 
-        _entry_text = entry_text
+        space_positions,_text_no_spaces = self._remove_spaces_from_text(entry_text)
         _isEncrypted = isEncrypted
 
         _normal_alphabet,_cipher_alphabet = self._get_alphabets(_isEncrypted)
 
         # Normalize text, for accents and spaces
         _normalized_entry_text = ''
-        for _letter in _entry_text:
+        for _letter in _text_no_spaces:
             if _letter not in _normal_alphabet:
                 _normalized_entry_text += self._normalize_text(_letter,True)
             else:
@@ -170,9 +170,11 @@ class Cipher:
                     self._stone_holder.add_step(f"{_temp_letter} -- PASS")
                 _cipher_text += _temp_letter
 
+        _cipher_text = self._restore_spaces_from_text(_cipher_text,space_positions)
+
         if save_result:
             self._logger.log_cipher(
-                original_text=_entry_text,
+                original_text=entry_text.upper(),
                 result_text=_cipher_text,
                 isEncrypted=_isEncrypted,
                 disk=self._disk,
@@ -190,6 +192,17 @@ class Cipher:
 
 
     ## HELPERS ##
+    def _remove_spaces_from_text(self,text:str) -> tuple[list[int],str]:
+        spaces_positions:list[int] = [pos for pos,letter in enumerate(text) if letter == " "]
+        new_text:str = text.replace(" ","")
+        return spaces_positions,new_text
+    
+    def _restore_spaces_from_text(self,spaceless_text:str,space_positions:list[int]) -> str:
+        chars = list(spaceless_text)
+        for pos in space_positions:
+            chars.insert(pos," ")
+        return "".join(chars)
+
     def _random_disk_order(self) -> list[str]:
         """
         Randomiza el orden de las partes del 'Disk' usando las ids de las partes.
