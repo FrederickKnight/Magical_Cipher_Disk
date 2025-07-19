@@ -13,6 +13,7 @@
   - Stones now apply even if it's the first letter.
   - A simple change occurs if the letter wasn't changed with the stones.
 - **Breaking**: Cipher is now ignoring the spaces for the position in the message.
+- **Breaking**: Cipher is now ignoring the special characters for the position in the message. Special Characters mean the chars that are now in the source alphabet.
 
 ### Removed
 
