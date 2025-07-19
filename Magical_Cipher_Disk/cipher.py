@@ -158,15 +158,17 @@ class Cipher:
         
         # Cipher
         _cipher_text = ""
+        position_offset_for_special_char = 0
         for i in range(len(_normalized_entry_text)):
             _temp_letter = _normalized_entry_text[i]
             
             # it expects that the _normal_alphabet doesn't containt spaces,
             # if there is space it skips it
             if _temp_letter in _normal_alphabet:
-                    _cipher_text += self._stone_holder.apply_stones(_temp_letter,i,_normal_alphabet,_cipher_alphabet,_isEncrypted)
+                    _cipher_text += self._stone_holder.apply_stones(_temp_letter,i-position_offset_for_special_char,_normal_alphabet,_cipher_alphabet,_isEncrypted)
             else:
                 if _temp_letter != " ":
+                    position_offset_for_special_char += 1
                     self._stone_holder.add_step(f"{_temp_letter} -- PASS")
                 _cipher_text += _temp_letter
 
