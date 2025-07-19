@@ -27,10 +27,10 @@ class Cipher:
 
         self._random = random.Random(self._random_seed)
 
-        self.__disk_order = None
-        self.__disk_index = None
+        self._disk_order = None
+        self._disk_index = None
         self._source_alphabet = None
-        self.__target_alphabet = None
+        self._target_alphabet = None
 
     @property
     def source_alphabet(self) -> str:
@@ -44,7 +44,7 @@ class Cipher:
         """
         Retorna el alfabeto del 'Disk' proporcionado.
         """
-        return self.__target_alphabet
+        return self._target_alphabet
 
     def Encrypt(self,entry_text:str = None,save_result:bool = True,context_for_log:str = "") -> str:
         """
@@ -98,28 +98,28 @@ class Cipher:
         if not self._disk.validate_alphabets(_source_alphabet):
             raise ValueError(f"Alphabets are not the same lenght, wich will cause errors in the Encryption or Decryption\nlen of disk {self._disk.alphabet_len}\nlen of cipher {len(source_alphabet)}")
 
-        self.__disk_order = disk_order if disk_order else self._random_disk_order()
+        self._disk_order = disk_order if disk_order else self._random_disk_order()
 
-        disk_parts = self._disk.parts_dict
+        disk_parts:dict = self._disk.parts_dict
         
         _temp_alphabet = ''.join(
             letter
-            for disk_id in self.__disk_order
+            for disk_id in self._disk_order
             for letter in disk_parts[disk_id]["part"]
         )
 
         if disk_index:
-            self.__disk_index = disk_index
+            self._disk_index = disk_index
         else:
             _index_1 = self._random.choice(_source_alphabet)
             _index_2 = self._random.choice(_temp_alphabet)
-            self.__disk_index = (_index_1,_index_2)
+            self._disk_index = (_index_1,_index_2)
         
-        _index_source_alphabet = _source_alphabet.index(str(self.__disk_index[0]).upper())
-        _index_target_alphabet = _temp_alphabet.index(str(self.__disk_index[1]).upper())
+        _index_source_alphabet = _source_alphabet.index(str(self._disk_index[0]).upper())
+        _index_target_alphabet = _temp_alphabet.index(str(self._disk_index[1]).upper())
 
         self._source_alphabet = _source_alphabet[_index_source_alphabet:] + _source_alphabet[:_index_source_alphabet]
-        self.__target_alphabet = _temp_alphabet[_index_target_alphabet:] + _temp_alphabet[:_index_target_alphabet]
+        self._target_alphabet = _temp_alphabet[_index_target_alphabet:] + _temp_alphabet[:_index_target_alphabet]
 
         return self
 
@@ -135,42 +135,46 @@ class Cipher:
             context_for_log (str, optional): Sera el nombre que se añadira al archivo generado.
 
         Raises:
-            ValueError: _description_
+            ValueError: Text was not provided
 
         Returns:
-            str: _description_
+            str: Text result of the cipher transformations.
         """
         if not entry_text or entry_text == "":
             raise ValueError("There is no text")
 
         space_positions,_text_no_spaces = self._remove_spaces_from_text(entry_text)
-        _isEncrypted = isEncrypted
 
-        _normal_alphabet,_cipher_alphabet = self._get_alphabets(_isEncrypted)
+        _source_alphabet,_target_alphabet = self._get_alphabets(isEncrypted)
 
-        # Normalize text, for accents and spaces
         _normalized_entry_text = ''
         for _letter in _text_no_spaces:
-            if _letter not in _normal_alphabet:
-                _normalized_entry_text += self._normalize_text(_letter,True)
+            if _letter not in _source_alphabet:
+                _normalized_entry_text += self._normalize_text(_letter,isUnidecode=True)
             else:
                 _normalized_entry_text += self._normalize_text(_letter)
         
         # Cipher
         _cipher_text = ""
         position_offset_for_special_char = 0
-        for i in range(len(_normalized_entry_text)):
-            _temp_letter = _normalized_entry_text[i]
-            
-            # it expects that the _normal_alphabet doesn't containt spaces,
-            # if there is space it skips it
-            if _temp_letter in _normal_alphabet:
-                    _cipher_text += self._stone_holder.apply_stones(_temp_letter,i-position_offset_for_special_char,_normal_alphabet,_cipher_alphabet,_isEncrypted)
+        
+        for idx,letter in enumerate(_normalized_entry_text):
+
+            _position = idx-position_offset_for_special_char
+            if letter in _source_alphabet:
+                _cipher_text += self._stone_holder.apply_stones(
+                    letter=letter,
+                    position=_position,
+                    source_alphabet=_source_alphabet,
+                    target_alphabet=_target_alphabet,
+                    isEncrypted=isEncrypted
+                )
+
             else:
-                if _temp_letter != " ":
-                    position_offset_for_special_char += 1
-                    self._stone_holder.add_step(f"{_temp_letter} -- PASS")
-                _cipher_text += _temp_letter
+                position_offset_for_special_char += 1
+                self._stone_holder.add_step(f"{letter} -- PASS")
+                _cipher_text += letter
+
 
         _cipher_text = self._restore_spaces_from_text(_cipher_text,space_positions)
 
@@ -178,14 +182,14 @@ class Cipher:
             self._logger.log_cipher(
                 original_text=entry_text.upper(),
                 result_text=_cipher_text,
-                isEncrypted=_isEncrypted,
+                isEncrypted=isEncrypted,
                 disk=self._disk,
-                disk_order=self.__disk_order,
-                disk_index=self.__disk_index,
+                disk_order=self._disk_order,
+                disk_index=self._disk_index,
                 stone_holder=self._stone_holder,
                 name=context_for_log,
                 source_alphabet=self._source_alphabet,
-                target_alphabet=self.__target_alphabet,
+                target_alphabet=self._target_alphabet,
                 cipher_seed=self._random_seed
             )
 
@@ -231,9 +235,9 @@ class Cipher:
             tuple[str,str]: Alfabetos en orden en el que se requieren para las transformaciones.
         """
         if isEncrypted:
-            return self.__target_alphabet,self._source_alphabet
+            return self._target_alphabet,self._source_alphabet
         else:
-            return self._source_alphabet,self.__target_alphabet
+            return self._source_alphabet,self._target_alphabet
         
     def _normalize_text(self,text:str='',isUnidecode:bool=False) -> str:
         """
