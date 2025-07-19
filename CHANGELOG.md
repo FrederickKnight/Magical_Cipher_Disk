@@ -19,6 +19,10 @@
 
 - *(To be Added)*
 
+### Fix:
+
+- Special Chars in entry text makes the encription incorrect or inconsistent. Such as ? or , in the entry text if these are not in the source alphabet, but are in the target alphabet. The cipher does not correctly skip or handle them. A patch is planned.
+
 
 ## 1.0.0 - 14-07-2025
 
