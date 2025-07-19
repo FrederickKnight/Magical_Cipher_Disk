@@ -2,6 +2,8 @@
 
 ## Tabla de Contenido
 
+- [Errores Conocidos](#errores-conocidos)
+    - [Caracteres Especiales](#caracteres-especiales) 
 - [Inspiración](#inspiración)
 - [Mécanicas](#mécanicas)
     - [Stones](#stones)
@@ -10,7 +12,37 @@
 - [Cipher](#cipher)
 - [Ejemplo Completo](#ejemplo-completo)
 - [CipherIO](#cipherio)
-- [Changelog](#chagelog)
+- [Changelog](#changelog)
+
+## Errores Conocidos
+
+### Caracteres Especiales
+
+Si el mensaje de entrada contiene caracteres especiales que no existen en el source alphabet pero si en el target alphabet, este no podra encriptar o desencriptar del todo corrrectamente los mensajes, aunque no es un efecto que rompe el cifrado, si genera ruido o pequeños errores.
+Un ejemplo de esto es tener los alfabetos asi al configurar el 'Cipher':
+
+```python
+source_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+target_alphabet = "123456789?[]&,BCDEFGHIJKLM"
+
+... (Resto de la configuracion)
+
+Mensaje = "Hola, Buenás tardes, o es de dia?"
+
+save_result = True
+
+cipher_text = cipher.Encrypt(Mensaje,save_result)
+# resultado = J18&, 4]5[?4 E&BG54, M 23 G5 GL&?
+
+decipher_text = cipher.Decrypt(cipher_text,save_result)
+# resultado = HOLAK SDVWRB KJIMVBB O ES DE DIAA
+
+# La , paso a ser K y las demas igual cambiaron
+```
+El resultado seria un cifrado normal, pero si se quiere desencriptar es cuando el problema sucederia.
+Pues caracteres como , o ? existirian en el mensaje cifrado, pero tambien en el alfabeto creando un bug porque el programa no sabe si estos pertenecian al mensaje original o son parte del cifrado.
+
+Se esta buscando una manera de resolver / manejar esto.
 
 ## Inspiración
 
@@ -22,7 +54,7 @@ Las mecanicas añadidas son en base a fantasia, con piedras magicas que actuan c
 
 ## Mécanicas
 
-Este cifrado tiene * mecanicas.
+Este cifrado tiene 4 mecanicas.
 
 ### Stones
 
