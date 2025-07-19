@@ -147,13 +147,11 @@ class Cipher:
 
         _source_alphabet,_target_alphabet = self._get_alphabets(isEncrypted)
 
-        _normalized_entry_text = ''
-        for _letter in _text_no_spaces:
-            if _letter not in _source_alphabet:
-                _normalized_entry_text += self._normalize_text(_letter,isUnidecode=True)
-            else:
-                _normalized_entry_text += self._normalize_text(_letter)
-        
+        _normalized_entry_text = self._normalize_text(
+            text=_text_no_spaces,
+            source_alphabet=_source_alphabet
+        )
+
         # Cipher
         _cipher_text = ""
         position_offset_for_special_char = 0
@@ -239,17 +237,24 @@ class Cipher:
         else:
             return self._source_alphabet,self._target_alphabet
         
-    def _normalize_text(self,text:str='',isUnidecode:bool=False) -> str:
+    def _normalize_text(self,text:str='',source_alphabet:str = "") -> str:
         """
-        Normaliza el texto para evitar acentos u otros caracteres especiales.
+        Normaliza el texto para evitar acentos u otros caracteres especiales 
+        que no existan en el source.
         Ademas de devolverlo commo mayusculas.
 
         Args:
-            text (str, optional): Texto que se requiere normalizar.
-            isUnidecode (bool, optional): Se requiere unidecode o no se requiere.
+            text (str): Texto que se requiere normalizar.
+            source_alphabet (str): Alfabeto que se usara como origen.
 
         Returns:
             str: Texto normalizado.
         """
-        _text = text.upper()
-        return unidecode(_text) if isUnidecode else _text
+        normalized_text = ""
+        for letter in text.upper():
+            if letter not in source_alphabet:
+                normalized_text += unidecode(letter)
+            else:
+                normalized_text += letter
+
+        return normalized_text
