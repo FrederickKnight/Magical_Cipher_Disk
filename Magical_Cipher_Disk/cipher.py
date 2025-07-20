@@ -3,6 +3,7 @@ from .stones_holder import StoneHolder
 from .cipher_io import CipherIO
 import random
 from unidecode import unidecode
+import warnings
 
 class Cipher:
 
@@ -169,6 +170,11 @@ class Cipher:
                 )
 
             else:
+                if letter in _target_alphabet:
+                    _warning_text = "\nWarning by letter in the text that can create errors during encrypt or decrypt.\n"
+                    _warning_text += f"This can be caused by the letter: [ {letter} ] that exist in the text provided and in the target alphabet but does't exist in the source alphabet"
+                    _warning_text += "Please consider using special characters like ,-.? if they exist in the target alphabet but don't want it to be in de decrypt"
+                    warnings.warn(message=_warning_text,category=UserWarning)
                 position_offset_for_special_char += 1
                 self._stone_holder.add_step(f"{letter} -- PASS")
                 _cipher_text += letter
