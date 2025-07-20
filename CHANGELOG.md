@@ -5,6 +5,7 @@
 ### Added
 
 - The version of the package is now in the log of the Cipher.
+- Warning for the bug of the special characters in the Cipher.
 
 ### Changed
 
