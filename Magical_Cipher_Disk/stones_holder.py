@@ -93,6 +93,9 @@ class StoneHolder:
     
     ## CALL LETTER CHANGES STONES/SIMPLE ##
     def _call_simple_change(self,letter:str,source_alphabet:str,target_alphabet:str) -> str:
+        """
+        Cambio simple de una letra y añadiendo el step al registro.
+        """
         _letter = self._change_letter(letter,source_alphabet,target_alphabet)
 
         self.add_step(f"{letter} -> {_letter} -- Change [SIMPLE]")
@@ -100,6 +103,9 @@ class StoneHolder:
         return _letter
 
     def _call_stone_redgreen(self,letter:str,source_alphabet:str,target_alphabet:str,isEncrypted:bool) -> str:
+        """
+        LLamada a la RED-GREEN Stone siesta disponible, y genera el cambio ademas de guardar el step en el registro.
+        """
         REDGREEN_STONE:BaseStone = self._stones.get("RED-GREEN")
 
         if REDGREEN_STONE:
@@ -111,6 +117,9 @@ class StoneHolder:
         return letter
 
     def _call_stone_blue(self,letter:str,position:int,source_alphabet:str,target_alphabet:str,isEncrypted:bool) -> str:
+        """
+        LLamada a la BLUE Stone siesta disponible, y genera el cambio ademas de guardar el step en el registro.
+        """
         BLUE_STONE:BaseStone = self._stones.get("BLUE")
 
         if BLUE_STONE:

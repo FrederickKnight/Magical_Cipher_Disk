@@ -6,7 +6,7 @@ from .disk import Disk
 from .stones_holder import StoneHolder
 
 class CipherIO:
-    def __init__(self,base_path:str = "./Messages",debug:bool = False):
+    def __init__(self,base_path:str = "./Messages",debug:bool = False) -> None:
         """
         Maneja la creacion del archivo donde se guardan las configuraciones y demas del Cipher.
 

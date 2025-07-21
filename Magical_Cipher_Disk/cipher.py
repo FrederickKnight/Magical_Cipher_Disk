@@ -7,7 +7,7 @@ import warnings
 
 class Cipher:
 
-    def __init__(self,disk:Disk = None,stone_holder:StoneHolder = None,logger:CipherIO = CipherIO(),seed:int = None):
+    def __init__(self,disk:Disk = None,stone_holder:StoneHolder = None,logger:CipherIO = CipherIO(),seed:int = None) -> None:
         """
         Maneja el Encriptado o Desencriptado, usando el 'Disk' y las 'Stones' del 'StoneHolder'.
 
@@ -85,7 +85,7 @@ class Cipher:
             context_for_log=context_for_log
         )
     
-    def config_cipher(self,source_alphabet:str = None,disk_order:list[str] = None,disk_index:tuple[str,str] = None):
+    def config_cipher(self,source_alphabet:str = None,disk_order:list[str] = None,disk_index:tuple[str,str] = None) -> None:
         """
         Configuira el cifrado que se hara, con los siguientes parametros.
 
@@ -203,11 +203,17 @@ class Cipher:
 
     ## HELPERS ##
     def _remove_spaces_from_text(self,text:str) -> tuple[list[int],str]:
+        """
+        Remueve los espacios del texto y regresa sus posiciones y texto sin espacios.
+        """
         spaces_positions:list[int] = [pos for pos,letter in enumerate(text) if letter == " "]
         new_text:str = text.replace(" ","")
         return spaces_positions,new_text
     
     def _restore_spaces_from_text(self,spaceless_text:str,space_positions:list[int]) -> str:
+        """
+        Recrea los espacios del texto usando las posiciones dadas.
+        """
         chars = list(spaceless_text)
         for pos in space_positions:
             chars.insert(pos," ")

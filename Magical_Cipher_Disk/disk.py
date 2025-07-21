@@ -23,10 +23,10 @@ class Disk:
     
         self._splits_list = splits if splits else self.__create_splits_list()
 
-        self.__parts = self.__create_split_alphabet()
+        self._parts = self.__create_split_alphabet()
         
         self._disk_parts = {}
-        for part in self.__parts:
+        for part in self._parts:
             _id = f"{part[0]}{part[-1]}"
             self._disk_parts[_id] = {
                 "lenght":len(part),
@@ -34,14 +34,14 @@ class Disk:
             }
 
     @property
-    def parts_list(self):
+    def parts_list(self) -> list[str]:
         """
         Retorna una lista copia de de las partes del 'Disk'.
         """
-        return self.__parts.copy()
+        return self._parts.copy()
     
     @property
-    def parts_dict(self):
+    def parts_dict(self) -> dict:
         """
         Retorna un diccionario copia de las partes del 'Disk'.
         """
@@ -62,20 +62,23 @@ class Disk:
         return list(self._disk_parts.keys())
     
     @property
-    def seed(self):
+    def seed(self) -> int:
         """
         Retorna la semilla usada para las partes Random.
         """
         return self._random_seed
     
     @property
-    def alphabet_len(self):
+    def alphabet_len(self) -> str:
         """
         Retorna el tamaño del alfabeto.
         """
         return len(self._entry_alphabet)
     
     def to_dict(self) -> dict:
+        """
+        Retorna un Diccionario del Disk, con lo necesario para su reconstruccion.
+        """
         return {
             "alphabet":self._entry_alphabet,
             "splits":self.splits,
@@ -83,7 +86,7 @@ class Disk:
         }
     
     @classmethod
-    def from_dict(cls,dictionary:dict) -> None:
+    def from_dict(cls,dictionary:dict) -> "Disk":
         """
         Crea una instancia de la clase usando un dict o JSON.
 
@@ -103,6 +106,15 @@ class Disk:
         )
 
     def validate_alphabets(self,source_alphabet:str = None) -> bool:
+        """
+        Valida los alfabetos tanto del Disk como el proporcionado en la funcion,
+
+        Args:
+            source_alphabet (str): Alfabeto que se usara como comparacion.
+
+        Returns:
+            bool: Verdadero si son iguales o Falso si no.
+        """
         return len(source_alphabet) == len(self._entry_alphabet)
 
     ## HELPERS ##
