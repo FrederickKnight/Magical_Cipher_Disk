@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [2.0.0] - 20-07-2025
 
 ### Added
 
@@ -16,16 +16,12 @@
 - **Breaking**: Cipher is now ignoring the spaces for the position in the message.
 - **Breaking**: Cipher is now ignoring the special characters for the position in the message. Special Characters mean the chars that are now in the source alphabet.
 
-### Removed
-
-- *(To be Added)*
-
-### Fix:
+### Fixed:
 
 - Special Chars in entry text makes the encription incorrect or inconsistent. Such as ? or , in the entry text if these are not in the source alphabet, but are in the target alphabet. The cipher does not correctly skip or handle them. A patch is planned.
 
 
-## 1.0.0 - 14-07-2025
+## [1.0.0] - 14-07-2025
 
 ### Added
 

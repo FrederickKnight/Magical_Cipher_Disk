@@ -1,8 +1,9 @@
 ###### DECRYPTED ######
-Date: 20250714_193717
+Date: 20250720_220652
+Version: 2.0.0
 
 ###### TEXT ######
-HTHO DHIY[YH/GZGY[YH HU?PE? D!¿I
+FTHO GTJZUZF/GZGY[YH F[*}DC D!¿I
 
 ###### RESULT DECRYPTED ######
 GOOD MORNING/EVENING GITHUB USER
@@ -29,21 +30,23 @@ BLUE -- 2
 Seed: 2025
 
 ###### TRACES ######
-H -> G -- Change [SIMPLE]
+F -> T -- Change [RED-GREEN]
+ ^ T -> G -- Change [BLUE]
 T -> O -- Change [SIMPLE]
 H -> B -- Change [RED-GREEN]
  ^ B -> O -- Change [BLUE]
 O -> D -- Change [SIMPLE]
-D -> M -- Change [SIMPLE]
-H -> B -- Change [RED-GREEN]
- ^ B -> O -- Change [BLUE]
-I -> R -- Change [SIMPLE]
-Y -> A -- Change [RED-GREEN]
- ^ A -> N -- Change [BLUE]
-[ -> I -- Change [SIMPLE]
-Y -> A -- Change [RED-GREEN]
- ^ A -> N -- Change [BLUE]
-H -> G -- Change [SIMPLE]
+G -> Z -- Change [RED-GREEN]
+ ^ Z -> M -- Change [BLUE]
+T -> O -- Change [SIMPLE]
+J -> E -- Change [RED-GREEN]
+ ^ E -> R -- Change [BLUE]
+Z -> N -- Change [SIMPLE]
+U -> V -- Change [RED-GREEN]
+ ^ V -> I -- Change [BLUE]
+Z -> N -- Change [SIMPLE]
+F -> T -- Change [RED-GREEN]
+ ^ T -> G -- Change [BLUE]
 / -- PASS
 G -> E -- Change [SIMPLE]
 Z -> I -- Change [RED-GREEN]
@@ -55,15 +58,15 @@ Y -> A -- Change [RED-GREEN]
 Y -> A -- Change [RED-GREEN]
  ^ A -> N -- Change [BLUE]
 H -> G -- Change [SIMPLE]
-H -> G -- Change [SIMPLE]
-U -> V -- Change [RED-GREEN]
- ^ V -> I -- Change [BLUE]
-? -> T -- Change [SIMPLE]
-P -> U -- Change [RED-GREEN]
- ^ U -> H -- Change [BLUE]
-E -> U -- Change [SIMPLE]
-? -> O -- Change [RED-GREEN]
- ^ O -> B -- Change [BLUE]
+F -> T -- Change [RED-GREEN]
+ ^ T -> G -- Change [BLUE]
+[ -> I -- Change [SIMPLE]
+* -> G -- Change [RED-GREEN]
+ ^ G -> T -- Change [BLUE]
+} -> H -- Change [SIMPLE]
+D -> H -- Change [RED-GREEN]
+ ^ H -> U -- Change [BLUE]
+C -> B -- Change [SIMPLE]
 D -> H -- Change [RED-GREEN]
  ^ H -> U -- Change [BLUE]
 ! -> S -- Change [SIMPLE]

@@ -1,11 +1,12 @@
 ###### ENCRYPTED ######
-Date: 20250714_193717
+Date: 20250720_220652
+Version: 2.0.0
 
 ###### TEXT ######
-Good Morning/Evening GitHub user
+GOOD MORNING/EVENING GITHUB USER
 
 ###### RESULT ENCRYPTED ######
-HTHO DHIY[YH/GZGY[YH HU?PE? D!¿I
+FTHO GTJZUZF/GZGY[YH F[*}DC D!¿I
 
 ###### ALPHABETS ######
 Source Alphabet: QRSTUVWXYZABCDEFGHIJKLMNOP
@@ -29,21 +30,23 @@ BLUE -- 2
 Seed: 2025
 
 ###### TRACES ######
-G -> H -- Change [SIMPLE]
+G -> * -- Change [RED-GREEN]
+ ^ * -> F -- Change [BLUE]
 O -> T -- Change [SIMPLE]
 O -> ? -- Change [RED-GREEN]
  ^ ? -> H -- Change [BLUE]
 D -> O -- Change [SIMPLE]
-M -> D -- Change [SIMPLE]
-O -> ? -- Change [RED-GREEN]
- ^ ? -> H -- Change [BLUE]
-R -> I -- Change [SIMPLE]
-N -> ! -- Change [RED-GREEN]
- ^ ! -> Y -- Change [BLUE]
-I -> [ -- Change [SIMPLE]
-N -> ! -- Change [RED-GREEN]
- ^ ! -> Y -- Change [BLUE]
-G -> H -- Change [SIMPLE]
+M -> I -- Change [RED-GREEN]
+ ^ I -> G -- Change [BLUE]
+O -> T -- Change [SIMPLE]
+R -> ¿ -- Change [RED-GREEN]
+ ^ ¿ -> J -- Change [BLUE]
+N -> Z -- Change [SIMPLE]
+I -> Z -- Change [RED-GREEN]
+ ^ Z -> U -- Change [BLUE]
+N -> Z -- Change [SIMPLE]
+G -> * -- Change [RED-GREEN]
+ ^ * -> F -- Change [BLUE]
 / -- PASS
 E -> G -- Change [SIMPLE]
 V -> U -- Change [RED-GREEN]
@@ -55,15 +58,15 @@ I -> [ -- Change [SIMPLE]
 N -> ! -- Change [RED-GREEN]
  ^ ! -> Y -- Change [BLUE]
 G -> H -- Change [SIMPLE]
-G -> H -- Change [SIMPLE]
-I -> Z -- Change [RED-GREEN]
- ^ Z -> U -- Change [BLUE]
-T -> ? -- Change [SIMPLE]
-H -> D -- Change [RED-GREEN]
- ^ D -> P -- Change [BLUE]
-U -> E -- Change [SIMPLE]
-B -> H -- Change [RED-GREEN]
- ^ H -> ? -- Change [BLUE]
+G -> * -- Change [RED-GREEN]
+ ^ * -> F -- Change [BLUE]
+I -> [ -- Change [SIMPLE]
+T -> F -- Change [RED-GREEN]
+ ^ F -> * -- Change [BLUE]
+H -> } -- Change [SIMPLE]
+U -> P -- Change [RED-GREEN]
+ ^ P -> D -- Change [BLUE]
+B -> C -- Change [SIMPLE]
 U -> P -- Change [RED-GREEN]
  ^ P -> D -- Change [BLUE]
 S -> ! -- Change [SIMPLE]
