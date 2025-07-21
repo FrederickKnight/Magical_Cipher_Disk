@@ -1,11 +1,12 @@
 from pathlib import Path
 from datetime import datetime
+from importlib.metadata import version, PackageNotFoundError
 
 from .disk import Disk
 from .stones_holder import StoneHolder
 
 class CipherIO:
-    def __init__(self,base_path:str = "./Messages",debug:bool = False):
+    def __init__(self,base_path:str = "./Messages",debug:bool = False) -> None:
         """
         Maneja la creacion del archivo donde se guardan las configuraciones y demas del Cipher.
 
@@ -73,6 +74,11 @@ class CipherIO:
         is_encrypted_suffix = "DECRYPTED" if isEncrypted else "ENCRYPTED"
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
+        try:
+            __version__ = version("Magical_Cipher_Disk")
+        except PackageNotFoundError:
+            __version__ = ""
+
         _name = name if name else ""
 
         required = {
@@ -95,7 +101,8 @@ class CipherIO:
         data = ""
 
         data += f"###### {is_encrypted_suffix} ######\n"
-        data += f"Date: {timestamp}\n\n"
+        data += f"Date: {timestamp}\n"
+        data += f"Version: {__version__}\n\n"
 
         data += f"###### TEXT ######\n"
         data += f"{original_text}\n\n"

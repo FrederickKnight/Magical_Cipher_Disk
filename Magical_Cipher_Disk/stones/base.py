@@ -1,5 +1,5 @@
 class BaseStone:
-    def __init__(self,name:str,value:int):
+    def __init__(self,name:str,value:int) -> None:
         """
         Base para la creacion de mas Stones, donde debera usarse el metodo apply() para configurar su efecto.
 
@@ -11,14 +11,14 @@ class BaseStone:
         self._value = max(value,0)
 
     @property
-    def name(self):
+    def name(self) -> str:
         """
         Retorna el nombre de la piedra.
         """
         return self._name.upper()
     
     @property
-    def value(self):
+    def value(self) -> int:
         """
         Retorna el valor de la piedra.
         """
@@ -39,18 +39,18 @@ class BaseStone:
         """
         return letter
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name}:{self.value}"
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Stone(name={self.name},value={self.value})"
     
-    def __eq__(self, other:"BaseStone"):
+    def __eq__(self, other:"BaseStone") -> bool:
         if isinstance(other,BaseStone):
             return self.name == other.name
         return False
     
-    def __add__(self,other:"BaseStone"):
+    def __add__(self,other:"BaseStone") -> "BaseStone":
         if isinstance(other,BaseStone) and self == other:
             new_value  = self.value+other.value
             return self.__class__(new_value)

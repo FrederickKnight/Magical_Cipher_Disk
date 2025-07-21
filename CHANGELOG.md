@@ -1,23 +1,27 @@
 # Changelog
 
-## Unreleased
+## [2.0.0] - 20-07-2025
 
 ### Added
 
-- Ability to reconstruct `Disk` and other components from JSON-like sources.
-- Support for more `Stone` colors.
-- New encryption methods.
+- The version of the package is now in the log of the Cipher.
+- Warning for the bug of the special characters in the Cipher.
 
 ### Changed
 
-- *(To be Added)*
+- Stones are now called by functions in the StoneHolder, to enhance readability and repeatability.
+- **Breaking**: Applying Stones:
+  - Stones now apply even if it's the first letter.
+  - A simple change occurs if the letter wasn't changed with the stones.
+- **Breaking**: Cipher is now ignoring the spaces for the position in the message.
+- **Breaking**: Cipher is now ignoring the special characters for the position in the message. Special Characters mean the chars that are now in the source alphabet.
 
-### Removed
+### Fixed:
 
-- *(To be Added)*
+- Special Chars in entry text makes the encription incorrect or inconsistent. Such as ? or , in the entry text if these are not in the source alphabet, but are in the target alphabet. The cipher does not correctly skip or handle them. A patch is planned.
 
 
-## 1.0.0 - 14-07-2025
+## [1.0.0] - 14-07-2025
 
 ### Added
 
