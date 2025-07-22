@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.0.1] - 22-07-2025
+
+### Fixed:
+- Error with the build of the package, Stones Files now are being added correctly to the package
+
 ## [2.0.0] - 20-07-2025
 
 ### Added
