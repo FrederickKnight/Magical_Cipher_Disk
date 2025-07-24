@@ -115,7 +115,7 @@ class CipherIO:
 
         data += f"###### Disk ######\n"
         data += f"Seed: {disk.seed}\n"
-        data += f"Splits: {disk.splits}'\n"
+        data += f"Splits: {disk.get_splits()}'\n"
         data += f"Ids: {disk.ids}\n"
         data += f"Parts. {disk.parts_list}\n"
         data += f"Order: {disk_order}\n"
