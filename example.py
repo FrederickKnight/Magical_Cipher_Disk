@@ -24,11 +24,13 @@ disk = mcd.Disk(
 )
 
 # creacion de las piedras con su valor
-stone_holder = mcd.StoneHolder([
-    mcd.YellowStone(2),
-    mcd.RedGreenStone(5),
-    mcd.BlueStone(2)
-])
+stone_holder = mcd.StoneHolder(
+    stones=[
+        mcd.YellowStone(value=2),
+        mcd.RedGreenStone(value=5),
+        mcd.BlueStone(value=2)
+    ]
+)
 
 # No es necesario, pero podemos crear un logger custom, aunque por ahora
 # solo guardara el mensaje con su configuracion
