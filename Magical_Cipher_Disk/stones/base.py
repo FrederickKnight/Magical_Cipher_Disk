@@ -1,28 +1,35 @@
-class BaseStone:
-    def __init__(self,name:str,value:int) -> None:
-        """
-        Base para la creacion de mas Stones, donde debera usarse el metodo apply() para configurar su efecto.
+from pydantic import BaseModel, Field, PrivateAttr, field_validator
+from typing import Self
 
-        Args:
-            name (str): Nombre de la piedra, generalmente se usa un color.
-            value (int): Valor de la piedra.
-        """
-        self._name = name
-        self._value = max(value,0)
+class BaseStone(BaseModel):
+    """
+    Base para la creacion de mas Stones, donde debera usarse el metodo apply() para configurar su efecto.
 
+    Args:
+        name (str): Nombre de la piedra, generalmente se usa un color.
+        value (int): Valor de la piedra.
+    """
+    value:int = Field(default=0)
+    _name:str = PrivateAttr(default=None)
+
+    @field_validator("value",mode="before")
+    @classmethod
+    def validate_value(cls,value:int) -> int:
+
+        if not isinstance(value,int):
+            raise TypeError(f"Expected int, got {type(value).__name__}")
+        
+        if value < 0:
+            raise ValueError("value must be a positive integer")
+        
+        return value
+    
     @property
     def name(self) -> str:
         """
-        Retorna el nombre de la piedra.
+        Retorna el nombre de la Stone.
         """
-        return self._name.upper()
-    
-    @property
-    def value(self) -> int:
-        """
-        Retorna el valor de la piedra.
-        """
-        return self._value
+        return self._name
     
     def apply(self,letter:str,source_alphabet:str = None,target_alphabet:str = None,isEncrypted:bool = False) -> str:
         """
@@ -45,13 +52,13 @@ class BaseStone:
     def __repr__(self) -> str:
         return f"Stone(name={self.name},value={self.value})"
     
-    def __eq__(self, other:"BaseStone") -> bool:
-        if isinstance(other,BaseStone):
+    def __eq__(self, other:Self) -> bool:
+        if isinstance(other,self.__class__):
             return self.name == other.name
         return False
     
-    def __add__(self,other:"BaseStone") -> "BaseStone":
-        if isinstance(other,BaseStone) and self == other:
-            new_value  = self.value+other.value
-            return self.__class__(new_value)
-        return NotImplementedError
+    def __add__(self,other:Self) -> Self:
+        if isinstance(other,self.__class__) and self == other:
+            new_value  = self.value + other.value
+            return self.__class__(value = new_value)
+        raise TypeError(f"Expected {type(self).__name__}, got {type(other).__name__}")

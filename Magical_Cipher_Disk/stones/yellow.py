@@ -1,15 +1,28 @@
 from .base import BaseStone
+from pydantic import field_validator, PrivateAttr
+from typing import Self
 
 class YellowStone(BaseStone):
-    def __init__(self, value):
-        self._modifier_limit = 4
-        super().__init__("YELLOW", value%self._modifier_limit)
+    _name:int = PrivateAttr(default="YELLOW")
 
-    def __add__(self,other:BaseStone) -> "YellowStone":
+    @field_validator("value",mode="before")
+    @classmethod
+    def validate_value(cls,value:int) -> int:
+        
+        if not isinstance(value,int):
+            raise TypeError(f"Expected int, got {type(value).__name__}")
+        
+        if value < 0:
+            raise ValueError("value must be a positive integer")
+        
+        return value % 4
+    
+    def __add__(self, other:Self) -> Self:
         """
         Las piedras de este color Yellow deben tener un maximo de valor de 4, por lo que cada suma se calculara usando el modulo con 4.
         """
-        if isinstance(other,BaseStone) and self == other:
-            new_value = (self._value+other._value)%self._modifier_limit
-            return YellowStone(new_value)
-        return NotImplementedError
+        if isinstance(other,self.__class__) and self == other:
+            new_value = (self.value + other.value) % 4
+            return self.__class__(value=new_value)
+        
+        raise TypeError(f"Expected YellowStone, got {type(other).__name__}")
