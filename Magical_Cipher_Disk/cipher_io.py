@@ -125,7 +125,7 @@ class CipherIO:
         data += f"###### Stones ######\n"
         data += f"[STONE] -- [VALUE]\n"
 
-        stones = stone_holder.stones
+        stones = stone_holder.stones_dict
         for stone in stones:
             _stone = stones.get(stone)
             data += f"{_stone.name} -- {_stone.value}\n"

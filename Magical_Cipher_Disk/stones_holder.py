@@ -1,25 +1,38 @@
 from .stones import BaseStone
+from pydantic import BaseModel, Field, PrivateAttr, model_validator, field_validator
+from typing import Self
 
-class StoneHolder:
-    def __init__(self,stones:list[BaseStone]) -> None:
-        """
-        Guarda la coleccion de 'Stones' y maneja cuando aplicar sus efectos para las transformaciones de letras.
+class StoneHolder(BaseModel):
+    """
+    Guarda la coleccion de 'Stones' y maneja cuando aplicar sus efectos para las transformaciones de letras.
 
-        Combina la lista dada de 'Stones' en un diccionario de nombre y valor para un uso mas sencillo.
-        Ademas recuerda / guarda los 'steps' / 'pasos' de cada transforacion para poder hacer un log despues.
+    Combina la lista dada de 'Stones' en un diccionario de nombre y valor para un uso mas sencillo.
+    Ademas recuerda / guarda los 'steps' / 'pasos' de cada transforacion para poder hacer un log despues.
 
-        Args:
-            stones (list[BaseStone]): Lista de 'BaseStones' de la cual se tomaran los efectos para las transforaciones.
-        """
-        self._stones:dict[str,BaseStone] = self._merge_stones(stones)
-        self._steps:list[str] = []
+    Args:
+        stones (list[BaseStone]): Lista de 'BaseStones' de la cual se tomaran los efectos para las transforaciones.
+    """
+    stones:list[BaseStone] = Field(default_factory=list[BaseStone])
+    _steps:list[str] = PrivateAttr(default_factory=list[str])
+    _merged_stones:dict[str,BaseStone] = PrivateAttr(default_factory=dict[str,BaseStone])
+
+    @model_validator(mode="after")
+    def merge_stones(self) -> Self:
+        for stone in self.stones:
+            key  = stone.name
+            if key in self._merged_stones:
+                self._merged_stones[key] = self._merged_stones[key] + stone
+            else:
+                self._merged_stones[key] = stone
+
+        return self
 
     @property
-    def stones(self) -> dict[str,BaseStone]:
+    def stones_dict(self) -> dict[str,BaseStone]:
         """
         Retorna un diccionario copia de 'Stones' guardadas, por nombre y valor.
         """
-        return self._stones.copy()
+        return self._merged_stones.copy()
     
     @property
     def steps(self) -> str:
@@ -57,7 +70,7 @@ class StoneHolder:
         if not target_alphabet or not isinstance(target_alphabet,str):
             raise ValueError(f"Error with the alphabet {target_alphabet}")
 
-        YELLOW_STONE:BaseStone = self._stones.get("YELLOW")
+        YELLOW_STONE:BaseStone = self._merged_stones.get("YELLOW")
 
         if YELLOW_STONE and YELLOW_STONE.value > 0 and position >= 0:
             if position % YELLOW_STONE.value == 0:
@@ -106,7 +119,7 @@ class StoneHolder:
         """
         LLamada a la RED-GREEN Stone siesta disponible, y genera el cambio ademas de guardar el step en el registro.
         """
-        REDGREEN_STONE:BaseStone = self._stones.get("RED-GREEN")
+        REDGREEN_STONE:BaseStone = self._merged_stones.get("RED-GREEN")
 
         if REDGREEN_STONE:
             _letter = REDGREEN_STONE.apply(letter, source_alphabet, target_alphabet, isEncrypted)
@@ -120,7 +133,7 @@ class StoneHolder:
         """
         LLamada a la BLUE Stone siesta disponible, y genera el cambio ademas de guardar el step en el registro.
         """
-        BLUE_STONE:BaseStone = self._stones.get("BLUE")
+        BLUE_STONE:BaseStone = self._merged_stones.get("BLUE")
 
         if BLUE_STONE:
             if BLUE_STONE.value > 0 and position % BLUE_STONE.value == 0:
@@ -146,25 +159,6 @@ class StoneHolder:
         return [t for t in self._steps if f"[{stone_name.upper()}]" in t]
     
     ## HELPERS ##
-    def _merge_stones(self,stones:list[BaseStone]) -> dict[str,BaseStone]:
-        """
-        Toma la lista de 'BaseStones' para combinar sus valores y guardarlos en un diccionario.
-
-        Args:
-            stones (list[BaseStone]): Lista de 'BaseStones'.
-
-        Returns:
-            dict[str,BaseStone]: Diccionario de nombre y valor de cada 'BaseStone'
-        """
-        merged = {}
-        for stone in stones:
-            key  = stone.name
-            if key in merged:
-                merged[key] = merged[key] + stone
-            else:
-                merged[key] = stone
-        return merged
-
     def _change_letter(self,letter:str,source_alphabet:str,target_alphabet:str) -> str:
         """
         Cambia la letra a su substitucion directa del 'source alphabet' al 'target alphabet',
@@ -178,9 +172,12 @@ class StoneHolder:
         Returns:
             str: La letra cambiada.
         """
-        _index = source_alphabet.index(str.upper(letter))
-        _result = str.upper(target_alphabet[_index])
-        return _result
+        if letter in source_alphabet:
+            _index = source_alphabet.index(str.upper(letter))
+            _result = str.upper(target_alphabet[_index])
+            return _result
+        
+        return letter
     
     def _clean_steps(self) -> None:
         """
