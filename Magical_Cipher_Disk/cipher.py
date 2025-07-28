@@ -1,37 +1,72 @@
 from .disk import Disk
 from .stones_holder import StoneHolder
 from .cipher_io import CipherIO
+from pydantic import BaseModel, Field, PrivateAttr, model_validator, field_validator
+from typing import Self
 import random
 from unidecode import unidecode
 import warnings
 
-class Cipher:
+class Cipher(BaseModel):
+    """
+    Maneja el Encriptado o Desencriptado, usando el 'Disk' y las 'Stones' del 'StoneHolder'.
 
-    def __init__(self,disk:Disk = None,stone_holder:StoneHolder = None,logger:CipherIO = CipherIO(),seed:int = None) -> None:
-        """
-        Maneja el Encriptado o Desencriptado, usando el 'Disk' y las 'Stones' del 'StoneHolder'.
+    Usa un estado o seed para lo que requiera randomizacion, y asi poder replicarlo.
 
-        Usa un estado o seed para lo que requiera randomizacion, y asi poder replicarlo.
+    Args:
+        disk (Disk, optional): Disk que se usara para el cifrado.
+        stone_holder (StoneHolder, optional): StoneHolder que guarda las Stones que se usaran para los efectos y transformaciones.
+        logger (CipherIO, optional): Logger para guardar todo el proceso y configuraciones, usa la clase CipherIO.
+        seed (int, optional): Seed que se usara para las partes que requieran ser randomizadas, asi podran replicarse.
+    """
+    logger:CipherIO = None
+    disk:Disk = None
+    stone_holder:StoneHolder = None
+    seed:int = None
 
-        Args:
-            disk (Disk, optional): Disk que se usara para el cifrado.
-            stone_holder (StoneHolder, optional): StoneHolder que guarda las Stones que se usaran para los efectos y transformaciones.
-            logger (CipherIO, optional): Logger para guardar todo el proceso y configuraciones, usa la clase CipherIO.
-            seed (int, optional): Seed que se usara para las partes que requieran ser randomizadas, asi podran replicarse.
-        """
-        self._logger = logger if logger else CipherIO()
+    _random:random.Random = PrivateAttr(default=None)
+    _disk_order:list[str] = PrivateAttr(default_factory=list[str])
+    _source_alphabet:str = PrivateAttr(default=None)
+    _target_alphabet:str = PrivateAttr(default=None)
 
-        self._stone_holder = stone_holder
-        self._disk = disk
+    @field_validator("seed",mode="before")
+    @classmethod
+    def validate_seed(cls,seed:int) -> int:
 
-        self._random_seed = seed if seed else random.SystemRandom().randint(0, 2**32 - 1)
+        if seed == None:
+            return random.SystemRandom().randint(0, 2**32 - 1)
+            
+        if not isinstance(seed,int):
+            raise TypeError(f"Expected int, got {type(seed).__name__}")
+        
+        if seed <= 0:
+            raise ValueError("Seed must be a positive integer.")
+        
+        return seed
+    
+    @field_validator("logger",mode="before")
+    @classmethod
+    def validate_logger(cls,logger:CipherIO) -> CipherIO:
+        if logger == None:
+            return CipherIO()
 
-        self._random = random.Random(self._random_seed)
+        if not isinstance(logger,CipherIO):
+            raise TypeError(f"Expected CipherIO, got {type(logger).__name__}")
+        
+        return logger
+        
+    @model_validator(mode="after")
+    def build_cipher(self) -> Self:
 
-        self._disk_order = None
-        self._disk_index = None
-        self._source_alphabet = None
-        self._target_alphabet = None
+        if not isinstance(self.disk,Disk):
+            raise TypeError(f"Expected Disk, got {type(self.disk).__name__}")
+        
+        if not isinstance(self.stone_holder,StoneHolder):
+            raise TypeError(f"Expected StoneHolder, got {type(self.stone_holder).__name__}")
+
+        self._random = random.Random(self.seed)
+
+        return self
 
     @property
     def source_alphabet(self) -> str:
@@ -96,12 +131,12 @@ class Cipher:
         """
         _source_alphabet = source_alphabet.upper() if source_alphabet else 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-        if not self._disk.validate_alphabets(_source_alphabet):
+        if not self.disk.validate_alphabets(_source_alphabet):
             raise ValueError(f"Alphabets are not the same lenght, wich will cause errors in the Encryption or Decryption\nlen of disk {self._disk.alphabet_len}\nlen of cipher {len(source_alphabet)}")
 
         self._disk_order = disk_order if disk_order else self._random_disk_order()
 
-        disk_parts:dict = self._disk.parts_dict
+        disk_parts:dict = self.disk.parts_dict
         
         _temp_alphabet = ''.join(
             letter
@@ -161,7 +196,7 @@ class Cipher:
 
             _position = idx-position_offset_for_special_char
             if letter in _source_alphabet:
-                _cipher_text += self._stone_holder.apply_stones(
+                _cipher_text += self.stone_holder.apply_stones(
                     letter=letter,
                     position=_position,
                     source_alphabet=_source_alphabet,
@@ -176,28 +211,28 @@ class Cipher:
                     _warning_text += "Please consider using special characters like ,-.? if they exist in the target alphabet but don't want it to be in de decrypt"
                     warnings.warn(message=_warning_text,category=UserWarning)
                 position_offset_for_special_char += 1
-                self._stone_holder.add_step(f"{letter} -- PASS")
+                self.stone_holder.add_step(f"{letter} -- PASS")
                 _cipher_text += letter
 
 
         _cipher_text = self._restore_spaces_from_text(_cipher_text,space_positions)
 
         if save_result:
-            self._logger.log_cipher(
+            self.logger.log_cipher(
                 original_text=entry_text.upper(),
                 result_text=_cipher_text,
                 isEncrypted=isEncrypted,
-                disk=self._disk,
+                disk=self.disk,
                 disk_order=self._disk_order,
                 disk_index=self._disk_index,
-                stone_holder=self._stone_holder,
+                stone_holder=self.stone_holder,
                 name=context_for_log,
                 source_alphabet=self._source_alphabet,
                 target_alphabet=self._target_alphabet,
-                cipher_seed=self._random_seed
+                cipher_seed=self.seed
             )
 
-        self._stone_holder._clean_steps()
+        self.stone_holder._clean_steps()
         return _cipher_text
 
 

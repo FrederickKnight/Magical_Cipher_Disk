@@ -4,26 +4,43 @@ from importlib.metadata import version, PackageNotFoundError
 
 from .disk import Disk
 from .stones_holder import StoneHolder
+from pydantic import BaseModel, Field, PrivateAttr, model_validator, field_validator
+from typing import Self
 
-class CipherIO:
-    def __init__(self,base_path:str = "./Messages",debug:bool = False) -> None:
-        """
-        Maneja la creacion del archivo donde se guardan las configuraciones y demas del Cipher.
+class CipherIO(BaseModel):
+    """
+    Maneja la creacion del archivo donde se guardan las configuraciones y demas del Cipher.
 
-        Args:
-            base_path (str, optional): Path Base de donde se quieren guardar los archivos. Default en "./Messages".
-            debug (bool, optional): Esta en modo debug o no. Default en False.
-        """
-        self._isDebug = debug
-        self._base_path:Path = Path(base_path).resolve()
-        self._base_path.mkdir(parents=True, exist_ok=True)
+    Args:
+        base_path (str, optional): Path Base de donde se quieren guardar los archivos. Default en "./Messages".
+        debug (bool, optional): Esta en modo debug o no. Default en False.
+    """
+    debug:bool = False
+    base_path:str = None
 
-        self._encrypted_dir = self._base_path / "Encrypted"
-        self._decrypted_dir = self._base_path / "Decrypted"
+    _path:Path = PrivateAttr(default=None)
 
-        _paths = [self._encrypted_dir, self._decrypted_dir]
-        for d in _paths:
-            d.mkdir(parents=True, exist_ok=True)
+    _path_encrypted:Path = PrivateAttr(default=None)
+    _path_decrypted:Path = PrivateAttr(default=None)
+
+    @model_validator(mode="after")
+    def create_paths(self) -> Self:
+
+        if not self.base_path:
+            _dir_path = "./Messages_For_Debug" if self.debug else "./Messages"
+        else:
+            _dir_path = self.base_path
+
+        self._path = Path(_dir_path).resolve()
+        self._path.mkdir(parents=True, exist_ok=True)
+
+        self._path_encrypted = self._path / "Encrypted"
+        self._path_decrypted = self._path / "Decrypted"
+
+        for paths in [self._path_encrypted,self._path_decrypted]:
+            paths.mkdir(parents=True,exist_ok=True)
+
+        return self
 
     def _unique_path(self, name: str,timestamp:str, is_encrypted_suffix: str, ext: str = "txt") -> Path:
         """
@@ -42,11 +59,11 @@ class CipherIO:
         _is_encrypted_suffix = is_encrypted_suffix.lower() 
 
         if _is_encrypted_suffix == "encrypted":
-            return self._encrypted_dir / filename
+            return self._path_encrypted / filename
         elif _is_encrypted_suffix == "decrypted":
-            return self._decrypted_dir / filename
+            return self._path_decrypted / filename
         else:
-            return self._base_path / filename
+            return self._path / filename
     
     def log_cipher(self,
                 original_text:str,result_text:str,isEncrypted:bool,
