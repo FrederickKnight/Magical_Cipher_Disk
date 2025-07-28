@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [2.1.0] - 27-07-2025
 
 ### Added
 - Added validations for each model using pydantic.

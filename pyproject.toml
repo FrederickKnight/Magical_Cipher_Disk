@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Magical_Cipher_Disk"
-version = "2.0.1"
+version = "2.1.0"
 description = "Cifrado César con añadidos de fantasia, permite encriptar y desencriptar mensajes"
 authors = [
     { name="John Frederick Knight Berra / FrederickKnight", email="infisefir@gmail.com" }
