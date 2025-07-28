@@ -3,20 +3,18 @@
 ## [Unreleased]
 
 ### Added
-
-- Added validator for seed: ensures positive integer, generates one if None.
-- Added validator for alphabet: sets default if None, validates type and applies .upper().
-- Added validator for splits: ensures all elements are integers if provided.
+- Added validations for each model using pydantic.
 
 ### Changed
 
 - Migrated to Pydantic for model construction and validation.
-- Introduced a getter method for splits to return a safe copy. This was early on but it was removed.
+- Introduced a getter method for splits in Disk class, to return a safe copy. This was early on but it was removed.
   
 ### Removed
 
-- Removed custom from_dict and to_dict methods in favor of model_dump and **data unpacking.
-- Removed property methods for seed and splits; now handled directly as fields.
+- Disk
+  - Removed custom from_dict and to_dict methods in favor of model_dump and **data unpacking.
+  - Removed property methods for seed and splits; now handled directly as fields.
 
 
 ## [2.0.1] - 22-07-2025
