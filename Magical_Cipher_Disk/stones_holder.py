@@ -18,6 +18,7 @@ class StoneHolder(BaseModel):
 
     @model_validator(mode="after")
     def merge_stones(self) -> Self:
+        self._merged_stones = {}
         for stone in self.stones:
             key  = stone.name
             if key in self._merged_stones:
