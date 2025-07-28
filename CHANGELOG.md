@@ -1,9 +1,27 @@
 # Changelog
 
+## [2.1.0] - 27-07-2025
+
+### Added
+- Added validations for each model using pydantic.
+
+### Changed
+
+- Migrated to Pydantic for model construction and validation.
+- Introduced a getter method for splits in Disk class, to return a safe copy. This was early on but it was removed.
+  
+### Removed
+
+- Disk
+  - Removed custom from_dict and to_dict methods in favor of model_dump and **data unpacking.
+  - Removed property methods for seed and splits; now handled directly as fields.
+
+
 ## [2.0.1] - 22-07-2025
 
 ### Fixed:
 - Error with the build of the package, Stones Files now are being added correctly to the package
+
 
 ## [2.0.0] - 20-07-2025
 
